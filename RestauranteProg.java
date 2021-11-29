@@ -1,4 +1,6 @@
-import java.util.Scanner;
+
+
+import javax.swing.JOptionPane;
 
 public class RestauranteProg{
     /* 
@@ -13,128 +15,143 @@ public class RestauranteProg{
     acum = acumulador */
 
     private String empleadoCaja[] = new String [50];
-    private String platillosS[] = new String [2];// para probarlo bajé la cantidad de platillos en el día. Volver a colocar los valores que son
-    private String codigoPS[]= new String[2];// para probarlo bajé la cantidad de platillos en el día. Volver a colocar los valores que son
-    private String codigoPO[]= new String[2];// para probarlo bajé la cantidad de platillos en el día. Volver a colocar los valores que son
-    private String platilloO[] = new String[2];// para probarlo bajé la cantidad de platillos en el día. Volver a colocar los valores que son
-    private double precioPS[] = new double [2];// para probarlo bajé la cantidad de platillos en el día. Volver a colocar los valores que son
-    private double precioPO[] = new double[2];// para probarlo bajé la cantidad de platillos en el día. Volver a colocar los valores que son
+    private String platillos[] = new String [6];
+    private String codigoPS;
+    private String codigoPO;
+    private String platilloO[] = new String[6];
+    private double precioPS[] = new double [6];
+    private double precioPO[] = new double[6];
+    private String pedidos[] =  new String[500];
     private String res, vR;
-    private int acum=0, acum2 = 0;
-    Scanner dta = new Scanner(System.in);
+    private int acum=0, acum2 = 0, opcionPO;
+
+    String platillo[] = {"Pimientos rellenos de quinoa", 
+                        "Huevos revueltos" , 
+                        "Salmón a la plancha", 
+                        "Pollo a la plancha",
+                        "Gambones a la plancha",
+                        "Huevos a la plancha",
+                        "Tortilla francesa"};
 
     public void CargarEmpleado(String vR){
         res = vR;
         for (int i = 0; i < 1; i++) {
-            empleadoCaja[acum] = dta.nextLine();
-            acum= acum + 1;
+            empleadoCaja[acum] = res; 
+            acum = acum + 1;
         }
     }
 
-    public void CargarPlatillosSemanal(){
-        System.out.println("Ingrese los platillos Semanales: ");
-        /* De primera se ejecuta esta parte ya que se tienen que introducir los platillos semanales primero */
-        for(int i = 0; i< platillosS.length; i++){
-            System.out.println("Ingrese el Nombre del platillo " + (i + 1));
-            platillosS[i]= dta.nextLine();
-            System.out.println("Ingrese el precio del platillo");
-            precioPS[i]= dta.nextDouble();
-            System.out.println("Ingrese el codigo del platillo");
-            codigoPS[i]= dta.nextLine();
+    public String MostrarPlatillosSemanal(){
+
+        String platillosM = "";
+        int num = 1;
+        // Se muestran los platillos precargados
+        for(int i = 0; i<= platillos.length; i++){
+            platillosM = platillosM + "\n"+num+"."+  platillo[i]+ "\n";
+            num = num + 1;
         }
-        System.out.println("Platillos cargados");
+        return platillosM;
     }
-    public void CargarPlatilloOferta(){
-        System.out.println("Ingrese el platillo diario: ");
-        for (int i = 0; i < 1; i++) {
-            /* Utilizo un for para evaluar la condicion una sola ves y el indice del arreglo es acum2 
-            el cual empieza en 0 la primera ves y luego va aumentando creando una forma de introducir 
-            datos sin tener que espesificar el indice */
-            platilloO[acum2] = dta.nextLine();
-            System.out.println("Ingrese el codigo del platillo");
-            codigoPO[acum2] = dta.nextLine();
-            System.out.println("Ingrese el precio del platillo");
-            precioPO[acum2] = dta.nextDouble();
-            acum2 = acum2 + 1;
+
+    
+
+    public void CargarPO(){
+        String platillosM = "";
+        int num = 1;
+        int iNum = 0;
+        
+        for(int i = 0; i<= platillos.length; i++){
+            platillosM = platillosM + "\n"+num+"."+  platillo[i]+ "\n";
+            num = num + 1;
         }
+
+        iNum = Integer.parseInt(JOptionPane.showInputDialog(null, platillosM, "Elija el platillo del día en oferta", JOptionPane.QUESTION_MESSAGE));
+        opcionPO = Integer.parseInt(JOptionPane.showInputDialog(null, platillo[iNum], "Coloque el descuento del platillo", JOptionPane.INFORMATION_MESSAGE));
+        //OpcionPO Guarda la info del descuento del platillo del día
+    }
+
+
+    public void PedidoCliente(){
+        acum2 = 0;
+        RestauranteProg rp = new RestauranteProg();
+        do {
+            opcionPO = Integer.parseInt(JOptionPane.showInputDialog(null, rp.MostrarPlatillosSemanal() + "\n" + "\n0.Salir"));
+            // coloco un condicional para saber si lo que llega es un numero distinto de 0
+            if(opcionPO != 0){
+                codigoPS = JOptionPane.showInputDialog(null, "Ingrese el codigo del pedido");
+                pedidos[acum2] = codigoPS;
+                /* System.out.println(pedidos[acum2]);  debug para saber si los numeros se cargan*/
+                acum2 = acum2 + 1;
+            }
+        } while (opcionPO != 0);
     }
 
     public void menu(){
         RestauranteProg rp = new RestauranteProg();
-        /* Se resetea la condicion en nada por si acaso la variable viene llena */
-        res="";
+        // se hace un bucle infinito
         do {
-            /* Se hace un bucle infinito para el menu en caso de que res sea = "0" el bucle finaliza */
-            System.out.println("Elija un opcion: ");
-            System.out.println("a.Cargar platillo diario en Oferta\nb.Terminar Turno\nc.Salir del programa");
-            res = dta.nextLine();
-            switch(res){
-                case"a":
-                rp.CargarPlatilloOferta();       
-                break;
-                case"b":
-                    System.out.println("¿Desea terminar su turno?\n[S(Si)/N(no)]");
-                    res = dta.nextLine();
-                    if(res.equals("S")){
-                        System.out.println("¿Terminó el dia?\n[S(Si)/N(no)]");
-                        res = dta.nextLine();
-                        if(res.equals("S")){
-                            do {
-                                System.out.println("Elija un opcion: ");
-                                System.out.println("a.Ventas Diarias por platillo\nb.La distribución porcentual diaria de las ventas totales por platillo\nc.Platillo más vendido en el día\nd.Platillo menos vendido en el día\ne.Monto otorgado en descuento de jubilado por día\nf.Avanzar a otro Día");
-                                //Dejo preparado el switch case para que introduzcan los metodos correspondientes, solo descomentar y asignar el metodo
-                                    res = dta.nextLine();
-                                switch (res) {
-                                    case "a":
-                                        
-                                    break;
-                                    case "b":
-                                        
-                                    break;
-                                    
-                                    case "c":
-                                        
-                                    break;
-                                    case "d":
-                                        
-                                    break;
-                                    case "f":
-                                        System.out.println("Ingrese el nombre del empleado: ");
-                                        vR = dta.nextLine();
+                // Menu con las opciones
+                res= JOptionPane.showInputDialog(null,
+                        "a.Elegir el descuento del platillo del día\n"+
+                        "b.Pedido del cliente\n"+
+                        "c.Terminar turno del empleado\n"+
+                        "d.Terminar turno del día\n"+
+                        "e.Salir del programa");
+                // Se evalua lo que manda "res" por medio del switch
+                        switch (res) {
+                            case "a":
+                                rp.CargarPO();
+                            break;
+                            case "b":
+                                rp.PedidoCliente();
+                            break;
+                            case "c":
+                                int res2 = JOptionPane.showConfirmDialog(null,"¿Termino su turno?");
+                                switch (res2) {
+                                    case JOptionPane.YES_OPTION:
+                                        vR = JOptionPane.showInputDialog( null, "Empleado ingrese su nombre: ");
                                         rp.CargarEmpleado(vR);
+                                    break;
+
+                                    // en caso que elija no no devuelve nada y este retornaal menu
+                                }
+                            break;
+                            case "d":
+                                // Aqui va el siguiente metodo
+                            break;
+                            case "e":
+                                // Se pregunta al usuario si quiere salir del programa
+                                 int res3 = JOptionPane.showConfirmDialog(null, "¿Realmente quiere salir?");
+                                switch (res3) {
+                                    case JOptionPane.YES_OPTION:
+                                        res = "0";    
+                                    break;
+                                    case JOptionPane.NO_OPTION:
+                                        res="";
+                                    break;
+                                    case JOptionPane.CANCEL_OPTION:
                                         res = "0";
                                     break;
+                                    
                                 }
-
-                            } while (res != "0");
+                            break;
+                        
+                            default:
+                                JOptionPane.showMessageDialog(null,"INGRESE UNA OPCION VALIDA \n","ERROR OPCION",JOptionPane.WARNING_MESSAGE);
+                            break;
                         }
-                    }
-
-                break;
-                case "c":
-                    System.out.println("¿Desea salir del programa?\n[S(Si)/N(no)]");
-                    res = dta.nextLine();
-                    if(res.equals("S")){
-                        res = "0";
-                    }
-                break;
-    
-            }
         } while (res != "0");
+        
 
 
     }
 
     public static void main(String[] args) {
         String vR;
-        Scanner dta = new Scanner(System.in);
         RestauranteProg rp = new RestauranteProg();
-        System.out.println("Bienvenido");
-        rp.CargarPlatillosSemanal();
-        System.out.println("Ingrese el nombre del empleado");
-        vR= dta.nextLine();
+        // De primera se pide el nombre del empleado
+        vR = JOptionPane.showInputDialog( null, "Empleado ingrese su nombre: ");
         rp.CargarEmpleado(vR);
-        dta.close();
         rp.menu();
     }
 
