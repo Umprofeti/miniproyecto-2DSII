@@ -15,9 +15,9 @@ public class RestauranteProg{
     acum = acumulador */
 
     private String empleadoCaja[] = new String [50];
-    private String platillos[] = new String [6];
+    private String platillos[][] = new String [1][6];
     private String codigoPS;
-    private String codigoPO;
+    private int pedidoCant[] = new int[200];
     private String platilloO[] = new String[6];
     private double precioPS[] = new double [6];
     private double precioPO[] = new double[6];
@@ -25,13 +25,13 @@ public class RestauranteProg{
     private String res, vR;
     private int acum=0, acum2 = 0, opcionPO;
 
-    String platillo[] = {"Pimientos rellenos de quinoa", 
-                        "Huevos revueltos" , 
-                        "Salmón a la plancha", 
-                        "Pollo a la plancha",
-                        "Gambones a la plancha",
-                        "Huevos a la plancha",
-                        "Tortilla francesa"};
+    String platillo[][] = {{"Pimientos rellenos de quinoa", 
+    "Huevos revueltos" , 
+    "Salmón a la plancha", 
+    "Pollo a la plancha",
+    "Gambones a la plancha",
+    "Huevos a la plancha",
+    "Tortilla francesa"},{"2.50", "2.00", "6.00","6.60", "8.00", "3.00", "2.70"}};
 
     public void CargarEmpleado(String vR){
         res = vR;
@@ -46,8 +46,8 @@ public class RestauranteProg{
         String platillosM = "";
         int num = 1;
         // Se muestran los platillos precargados
-        for(int i = 0; i<= platillos.length; i++){
-            platillosM = platillosM + "\n"+num+"."+  platillo[i]+ "\n";
+        for(int i = 0; i<= 6; i++){
+            platillosM = platillosM + "\n"+num+"."+  platillo[0][i]+ " | " + platillo[1][i] + "\n";
             num = num + 1;
         }
         return platillosM;
@@ -75,12 +75,15 @@ public class RestauranteProg{
         acum2 = 0;
         RestauranteProg rp = new RestauranteProg();
         do {
-            opcionPO = Integer.parseInt(JOptionPane.showInputDialog(null, rp.MostrarPlatillosSemanal() + "\n" + "\n0.Salir"));
+            opcionPO = Integer.parseInt(JOptionPane.showInputDialog(null, rp.MostrarPlatillosSemanal() + "\n" + "\n0.Finalizar pedido"));
             // coloco un condicional para saber si lo que llega es un numero distinto de 0
             if(opcionPO != 0){
-                codigoPS = JOptionPane.showInputDialog(null, "Ingrese el codigo del pedido");
+                codigoPS = JOptionPane.showInputDialog(null, "Ingrese el codigo del platillo");
                 pedidos[acum2] = codigoPS;
-                /* System.out.println(pedidos[acum2]);  debug para saber si los numeros se cargan*/
+                pedidoCant[acum2] = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese la cantidad"));
+                /* System.out.println(pedidoCant[acum2]); // debug para saber si la cantidad se está guardando */
+
+                /* System.out.println(pedidos[acum2]);  // debug para saber si los pedidos se cargan*/
                 acum2 = acum2 + 1;
             }
         } while (opcionPO != 0);
@@ -113,7 +116,7 @@ public class RestauranteProg{
                                         rp.CargarEmpleado(vR);
                                     break;
 
-                                    // en caso que elija no no devuelve nada y este retornaal menu
+                                    // en caso que elija no, no devuelve nada y este retorna al menu
                                 }
                             break;
                             case "d":
